@@ -56,53 +56,8 @@
 <section id="skills" class="py-20 bg-gray-100">
     <div class="container mx-auto text-center px-4">
         <h2 class="text-3xl font-bold">Skills</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
-            <!-- Skill Card -->
-            <div class="bg-white p-6 rounded shadow-lg">
-                <h3 class="text-2xl font-bold mb-4">C/C++/C#</h3>
-                <progress class="progress progress-info w-full" value="66" max="100"></progress>
-                <p class="mt-2">Intermediate</p>
-            </div>
-            <div class="bg-white p-6 rounded shadow-lg">
-                <h3 class="text-2xl font-bold mb-4">HTML5/CSS3</h3>
-                <progress class="progress progress-success w-full" value="100" max="100"></progress>
-                <p class="mt-2">Advanced</p>
-            </div>
-            <div class="bg-white p-6 rounded shadow-lg">
-                <h3 class="text-2xl font-bold mb-4">Java</h3>
-                <progress class="progress progress-info w-full" value="66" max="100"></progress>
-                <p class="mt-2">Intermediate</p>
-            </div>
-            <div class="bg-white p-6 rounded shadow-lg">
-                <h3 class="text-2xl font-bold mb-4">Dart</h3>
-                <progress class="progress progress-info w-full" value="66" max="100"></progress>
-                <p class="mt-2">Intermediate</p>
-            </div>
-            <div class="bg-white p-6 rounded shadow-lg">
-                <h3 class="text-2xl font-bold mb-4">Python</h3>
-                <progress class="progress progress-info w-full" value="66" max="100"></progress>
-                <p class="mt-2">Intermediate</p>
-            </div>
-            <div class="bg-white p-6 rounded shadow-lg">
-                <h3 class="text-2xl font-bold mb-4">JavaScript</h3>
-                <progress class="progress progress-success w-full" value="100" max="100"></progress>
-                <p class="mt-2">Advanced</p>
-            </div>
-            <div class="bg-white p-6 rounded shadow-lg">
-                <h3 class="text-2xl font-bold mb-4">MS Office</h3>
-                <progress class="progress progress-success w-full" value="100" max="100"></progress>
-                <p class="mt-2">Advanced</p>
-            </div>
-            <div class="bg-white p-6 rounded shadow-lg">
-                <h3 class="text-2xl font-bold mb-4">WordPress</h3>
-                <progress class="progress progress-info w-full" value="66" max="100"></progress>
-                <p class="mt-2">Intermediate</p>
-            </div>
-            <div class="bg-white p-6 rounded shadow-lg">
-                <h3 class="text-2xl font-bold mb-4">Illustrator/Caput/Premiere</h3>
-                <progress class="progress progress-info w-full" value="66" max="100"></progress>
-                <p class="mt-2">Intermediate</p>
-            </div>
+        <div id="skills-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+            <!-- Skills will be populated here -->
         </div>
     </div>
 </section>
@@ -178,6 +133,25 @@
         });
     }
 
+    function parseSkillsMarkdown(text) {
+        const container = document.getElementById('skills-list');
+        const sections = text.split('\n## ').slice(1);
+        sections.forEach(section => {
+            const [level, ...skillsList] = section.split('\n');
+            const skills = skillsList.join('\n').split('\n- ').slice(1);
+            skills.forEach(skill => {
+                const progress = level.trim() === 'Advanced' ? 100 : 66;
+                container.innerHTML += `
+                    <div class="bg-white p-6 rounded shadow-lg">
+                        <h3 class="text-2xl font-bold mb-4">${skill}</h3>
+                        <progress class="progress progress-${progress === 100 ? 'success' : 'info'} w-full" value="${progress}" max="100"></progress>
+                        <p class="mt-2">${level}</p>
+                    </div>
+                `;
+            });
+        });
+    }
+
     function parseAccomplishmentsMarkdown(text) {
         const container = document.getElementById('accomplishments-list');
         const activities = text.split('\n## ').slice(1);
@@ -199,6 +173,12 @@
         if (projectsMarkdown) {
             console.log('Projects Markdown:', projectsMarkdown);
             parseProjectsMarkdown(projectsMarkdown);
+        }
+
+        const skillsMarkdown = await fetchMarkdownFile('https://raw.githubusercontent.com/Monaliza14xx/portfolio/main/contents/skills/skills.md');
+        if (skillsMarkdown) {
+            console.log('Skills Markdown:', skillsMarkdown);
+            parseSkillsMarkdown(skillsMarkdown);
         }
 
         const accomplishmentsMarkdown = await fetchMarkdownFile('https://raw.githubusercontent.com/Monaliza14xx/portfolio/main/contents/activities/activities.md');
