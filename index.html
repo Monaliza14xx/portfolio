@@ -186,10 +186,10 @@
     }
 
     document.addEventListener('DOMContentLoaded', async () => {
-        const projectsMarkdown = await fetchMarkdownFile('https://raw.githubusercontent.com/Monaliza14xx/your-repo/main/contents/projects/projects.md');
+        const projectsMarkdown = await fetchMarkdownFile('https://raw.githubusercontent.com/Monaliza14xx/portfolio/main/contents/projects/projects.md');
         parseProjectsMarkdown(projectsMarkdown);
 
-        const accomplishmentsMarkdown = await fetchMarkdownFile('https://raw.githubusercontent.com/Monaliza14xx/your-repo/main/contents/activities/activities.md');
+        const accomplishmentsMarkdown = await fetchMarkdownFile('https://raw.githubusercontent.com/Monaliza14xx/portfolio/main/contents/activities/activities.md');
         parseAccomplishmentsMarkdown(accomplishmentsMarkdown);
     });
 </script>
