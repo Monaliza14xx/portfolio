@@ -7,6 +7,7 @@
     <title>Developer Portfolio</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/daisyui@1.18.0/dist/full.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body class="bg-gray-100 text-gray-900">
 
@@ -46,15 +47,8 @@
 <section id="projects" class="bg-white text-gray-900 py-20">
     <div class="container mx-auto text-center px-4">
         <h2 class="text-3xl font-bold">Projects</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
-            <!-- Repeat this block for each project -->
-            <div class="bg-gray-200 p-6 rounded shadow-lg">
-                <h3 class="text-2xl font-bold">Lao OCR</h3>
-                <p class="mt-4">
-                    The Lao OCR project is a tool developed by students at the National University of Laos. It converts scanned Laotian text in images into digital text using optical character recognition (OCR) technology. Users can upload images to extract and work with Laotian text easily. The project aims to enhance accessibility and digitization of Laotian language resources.
-                </p>
-                <a href="https://ocr.lao-ai.org" target="_blank" class="text-blue-500 hover:text-blue-700 mt-4 inline-block">View Project</a>
-            </div>
+        <div id="projects-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+            <!-- Project cards will be populated here -->
         </div>
     </div>
 </section>
@@ -116,42 +110,8 @@
 <section id="accomplishments" class="bg-white text-gray-900 py-20">
     <div class="container mx-auto text-center px-4">
         <h2 class="text-3xl font-bold">Event & Accomplishments</h2>
-        <div class="mt-8 text-left mx-auto max-w-4xl">
-            <h3 class="text-2xl font-bold">2019</h3>
-            <ul class="list-disc list-inside">
-                <li>Tonkar Science Workshop</li>
-            </ul>
-            <h3 class="text-2xl font-bold mt-6">2020</h3>
-            <ul class="list-disc list-inside">
-                <li>Volunteer XiangMiang (YET Project)</li>
-                <li>FRA Competition Online</li>
-                <li>ASEAN DIP Online</li>
-                <li>ASEAN Data Science Explorers Online</li>
-                <li>ASCIS Online</li>
-                <li>Weblog Design Contest By CEIT 1st runner-up</li>
-                <li>AC STEM Lab Vientiane</li>
-            </ul>
-            <h3 class="text-2xl font-bold mt-6">2021</h3>
-            <ul class="list-disc list-inside">
-                <li>A short-term exchange at Niigata University Online</li>
-                <li>Tech StartUp Contest by SOLUTEK</li>
-                <li>Stupid Hackathon Thailand 5 Online</li>
-                <li>Cyber Sea Game Online</li>
-                <li>Cyber Security Training Online by AJCCBC</li>
-            </ul>
-            <h3 class="text-2xl font-bold mt-6">2022</h3>
-            <ul class="list-disc list-inside">
-                <li>EAS Hackathon by Asan Foundation</li>
-                <li>Toyota Incubation Program The winner</li>
-                <li>Honda Y-E-S Awards Top 10 final lists</li>
-                <li>Huawei Seed For The Future</li>
-                <li>The Youth Innovation Competition on Lantsang-Mekong Region’s Governance and Development</li>
-            </ul>
-            <h3 class="text-2xl font-bold mt-6">2023</h3>
-            <ul class="list-disc list-inside">
-                <li>YSEALI Enviro-Tech</li>
-                <li>G-Dorm program</li>
-            </ul>
+        <div id="accomplishments-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+            <!-- Accomplishments cards will be populated here -->
         </div>
     </div>
 </section>
@@ -181,8 +141,58 @@
 </section>
 
 <footer class="bg-gray-800 text-white text-center py-4">
-    <p>&copy; 2024 Khonepaseuth SOUNAKAHEN. All rights reserved.</p>
+    <p>&copy; 2023 Khonepaseuth SOUNAKAHEN. All rights reserved.</p>
 </footer>
+
+<script>
+    async function fetchMarkdownFile(url) {
+        const response = await fetch(url);
+        const text = await response.text();
+        return text;
+    }
+
+    function parseProjectsMarkdown(text) {
+        const container = document.getElementById('projects-list');
+        const projects = text.split('\n## ').slice(1);
+        projects.forEach(project => {
+            const [title, ...rest] = project.split('\n');
+            const description = rest.join('\n').split('\n[')[0];
+            const link = rest.join('\n').match(/\[(.*?)\]\((.*?)\)/);
+            container.innerHTML += `
+                <div class="bg-gray-200 p-6 rounded shadow-lg">
+                    <h3 class="text-2xl font-bold">${title}</h3>
+                    <p class="mt-4">${description}</p>
+                    <a href="${link[2]}" target="_blank" class="text-blue-500 hover:text-blue-700 mt-4 inline-block">View Project</a>
+                </div>
+            `;
+        });
+    }
+
+    function parseAccomplishmentsMarkdown(text) {
+        const container = document.getElementById('accomplishments-list');
+        const activities = text.split('\n## ').slice(1);
+        activities.forEach(activity => {
+            const [title, ...rest] = activity.split('\n');
+            const description = rest.join('\n').split('\n[')[0];
+            const link = rest.join('\n').match(/\[(.*?)\]\((.*?)\)/);
+            container.innerHTML += `
+                <div class="bg-gray-200 p-6 rounded shadow-lg">
+                    <h3 class="text-2xl font-bold">${title}</h3>
+                    <p class="mt-4">${description}</p>
+                    <a href="${link[2]}" target="_blank" class="text-blue-500 hover:text-blue-700 mt-4 inline-block">View Activity</a>
+                </div>
+            `;
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        const projectsMarkdown = await fetchMarkdownFile('https://raw.githubusercontent.com/Monaliza14xx/your-repo/main/contents/projects/projects.md');
+        parseProjectsMarkdown(projectsMarkdown);
+
+        const accomplishmentsMarkdown = await fetchMarkdownFile('https://raw.githubusercontent.com/Monaliza14xx/your-repo/main/contents/activities/activities.md');
+        parseAccomplishmentsMarkdown(accomplishmentsMarkdown);
+    });
+</script>
 
 </body>
 </html>
