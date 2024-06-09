@@ -1,9 +1,7 @@
 # Activities
 
 ## 2019
-- Tonkar Science Workshop
-- Tonkar Science Workshop
-- Tonkar Science Workshop
+- Tonkar Science Workshop for Arduino
 
 ## 2020
 - Volunteer XiangMiang (YET Project)
@@ -29,8 +27,6 @@
 - The Youth Innovation Competition on Lantsang-Mekong Region’s Governance and Development
 
 ## 2023
+- G-Dorm program
 - YSEALI Enviro-Tech
-- G-Dorm program
-- G-Dorm program
-- G-Dorm program
-- G-Dorm program
+
